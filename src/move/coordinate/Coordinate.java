@@ -40,6 +40,10 @@ public class Coordinate {
         return r;
     }
 
+    public boolean isSame(Coordinate c) {
+        return this.x == c.x && this.y == c.y;
+    }
+
     public String toString(){
         return coordinatetoString(x, y);
     }
@@ -51,4 +55,5 @@ public class Coordinate {
     public int getY() {
         return y;
     }
+
 }

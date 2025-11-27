@@ -8,12 +8,10 @@ public class Test {
     {
         Game g = new Game();
         System.out.println(g.toString());
-        g.getBoard().movePieceWithoutRestriction(new Move("A1 - E5"));
-        System.out.println();
+        System.out.println(g.isChecked(true));
+        g.getBoard().movePieceWithoutRestriction(new Move("A2 - H2"));
         System.out.println(g.toString());
-        for (Move m : g.getBoard().getPieceAt(new Coordinate("A2")).allMoves(g.getBoard(), new Coordinate("A2"))) {
-            System.out.println(m.toString());
-        }
+        System.out.println(g.isChecked(true));
     }
 
 }
