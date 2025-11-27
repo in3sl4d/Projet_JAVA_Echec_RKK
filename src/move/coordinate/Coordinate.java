@@ -2,6 +2,24 @@ package move.coordinate;
 
 public class Coordinate {
 
+    private final int x, y;
+
+    public Coordinate(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public Coordinate(String c)
+    {
+        int[] s = stringToCoordinate(c);
+        this.x = s[0];
+        this.y = s[1];
+    }
+
+    public static boolean coordonateIsLegit(int x, int y) {
+        return x >= 0 && x < 8 && y >= 0 && y < 8;
+    }
+
     public static String coordinatetoString(int x, int y) {
         if(x > 7 || x < 0 || y > 7 || y < 0) throw new CoordinateNotValidExecption("Coordinates must be between 0 and 7");
         char h = ((char) ('A' + y));
@@ -22,4 +40,15 @@ public class Coordinate {
         return r;
     }
 
+    public String toString(){
+        return coordinatetoString(x, y);
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
 }

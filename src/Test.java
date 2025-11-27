@@ -7,7 +7,9 @@ public class Test {
     {
         Game g = new Game();
         System.out.println(g.toString());
-        System.out.println(Move.CoordinateToString(1, 4, 3, 4));
+        g.getBoard().movePieceWithoutRestriction(new Move("A1 - H8"));
+        System.out.println();
+        System.out.println(g.toString());
     }
 
 }

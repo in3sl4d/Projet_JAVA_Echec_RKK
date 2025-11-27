@@ -12,4 +12,8 @@ public class Game {
     {
         return board.toString();
     }
+
+    public Board getBoard() {
+        return board;
+    }
 }

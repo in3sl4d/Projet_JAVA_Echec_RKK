@@ -2,6 +2,8 @@ package piece;
 
 import game.Board;
 import move.Move;
+import move.coordinate.Coordinate;
+
 import java.util.ArrayList;
 
 public class King implements IPiece {
@@ -13,7 +15,7 @@ public class King implements IPiece {
     }
 
     @Override
-    public ArrayList<Move> allMoves(Board board) {
+    public ArrayList<Move> allMoves(Board board, Coordinate coord) {
         return null;
     }
 
