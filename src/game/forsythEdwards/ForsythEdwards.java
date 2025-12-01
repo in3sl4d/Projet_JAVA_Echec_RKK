@@ -12,40 +12,37 @@ public class ForsythEdwards {
 
     private ArrayList<Coordinate> coordonateList;
     private ArrayList<IPiece> pieces;
-    private static String[] allPS = {"k", "r"};
 
-    public ForsythEdwards(String strF) {
-        int x = 7;
-        int y = 0;
-        List<String> allp = Arrays.asList(allPS);
+    public ForsythEdwards(String fen) {
+
         coordonateList = new ArrayList<>();
         pieces = new ArrayList<>();
-        char[] chars = strF.toCharArray();
-        for(int i = 0; i < chars.length; i++) {
-            String s = "" + chars[i];
-            if(s.equals(" ")) break;
-            if(allp.contains(s.toLowerCase())) {
-                pieces.add(PieceFactorie.createPiece(s.toLowerCase(), Character.isUpperCase(chars[i + 1])));
-                coordonateList.add(new Coordinate(x, y));
-                i++;y++;
-                if(y >= 7){ x --; y = 0; }
-            } else if (s.equals("/")) {
-                ++i;
+
+        int x = 7;
+        int y = 0;
+
+        char[] chars = fen.toCharArray();
+
+        for (char c : chars) {
+
+            if (c == ' ') break;
+            if (c == '/') {
+                x--;y = 0;
+                continue;
             }
-            if(Character.isDigit(chars[i])) {
-                for(int j = 0; j < Integer.parseInt(s); j++) {
-                    y++;
-                    if(y >= 7)x --; y = 0;
-                }
+            if (Character.isDigit(c)) {
+                y += Character.getNumericValue(c);
+                continue;
             }
+            boolean isWhite = Character.isUpperCase(c);
+            char type = Character.toLowerCase(c);
+            pieces.add(PieceFactorie.createPiece(String.valueOf(type), isWhite));
+            coordonateList.add(new Coordinate(x, y));
+            y++;
+
         }
     }
 
-    public ArrayList<IPiece> getPieces() {
-        return pieces;
-    }
-
-    public ArrayList<Coordinate> getCoordonateList() {
-        return coordonateList;
-    }
+    public ArrayList<IPiece> getPieces() { return pieces; }
+    public ArrayList<Coordinate> getCoordonateList() { return coordonateList; }
 }

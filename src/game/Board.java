@@ -22,22 +22,44 @@ public class Board {
         allBlackPieces = new ArrayList<>();
     }
 
-    private void addPieces(ArrayList<IPiece> pieces, ArrayList<Coordinate> co) {
-        if(pieces.size() != co.size()) throw new IllegalArgumentException("each pawn needs to have assigned coordinate");
-        for (int i = 0; i < pieces.size() - 1; i++) {
-            IPiece p = pieces.get(i);
-            Coordinate c = co.get(i);
-            if(!c.isLegit()) throw new IllegalArgumentException("coordinate needs to be legit");
-            if(p != null) putPiece(p, c.toString());
-        }
-    }
-
     public Board(String strf) {
         this();
         ForsythEdwards f = new ForsythEdwards(strf);
         addPieces(f.getPieces(), f.getCoordonateList());
     }
 
+    public Board(Board other) {
+        this.board = new IPiece[8][8];
+        this.allWhitePieces = new ArrayList<>();
+        this.allBlackPieces = new ArrayList<>();
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                IPiece p = other.board[i][j];
+                this.board[i][j] = p;
+                if (p != null) {
+                    if (p.getIsWhite()) allWhitePieces.add(p);
+                    else allBlackPieces.add(p);
+
+                    if (p instanceof King) {
+                        if (p.getIsWhite()) this.whiteKing = p;
+                        else this.blackKing = p;
+                    }
+                }
+            }
+        }
+    }
+
+
+    private void addPieces(ArrayList<IPiece> pieces, ArrayList<Coordinate> co) {
+        if(pieces.size() != co.size()) throw new IllegalArgumentException("each pawn needs to have assigned coordinate");
+        for (int i = 0; i < pieces.size(); i++) {
+            IPiece p = pieces.get(i);
+            Coordinate c = co.get(i);
+            if(!c.isLegit()) throw new IllegalArgumentException("coordinate needs to be legit");
+            if(p != null) putPiece(p, c.toString());
+        }
+    }
 
     private void setWhiteKing(IPiece piece) {
         whiteKing = piece;
