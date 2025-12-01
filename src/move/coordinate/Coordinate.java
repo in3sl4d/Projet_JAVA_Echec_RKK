@@ -48,6 +48,10 @@ public class Coordinate {
         return coordinatetoString(x, y);
     }
 
+    public boolean isLegit() {
+        return coordonateIsLegit(x, y);
+    }
+
     public int getX() {
         return x;
     }

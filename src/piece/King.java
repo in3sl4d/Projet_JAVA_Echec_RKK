@@ -1,6 +1,7 @@
 package piece;
 
 import game.Board;
+import game.IPiece;
 import move.Move;
 import move.coordinate.Coordinate;
 

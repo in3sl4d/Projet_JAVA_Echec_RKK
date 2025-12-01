@@ -2,7 +2,6 @@ package game;
 
 import move.Move;
 import move.coordinate.Coordinate;
-import piece.IPiece;
 
 import java.util.ArrayList;
 
@@ -13,6 +12,8 @@ public class Game {
     public Game() {
         board = new Board();
     }
+
+    public Game(String str) {board = new Board(str);}
 
     public String toString()
     {

@@ -1,12 +1,10 @@
 package game;
 
+import game.forsythEdwards.ForsythEdwards;
 import move.Move;
 import move.coordinate.Coordinate;
-import piece.IPiece;
 import piece.King;
-import piece.Rook;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 public class Board {
@@ -22,10 +20,24 @@ public class Board {
         board = new IPiece[BOARD_SIZE][BOARD_SIZE];
         allWhitePieces = new ArrayList<>();
         allBlackPieces = new ArrayList<>();
-        putPiece(new King(true), "H5");
-        putPiece(new Rook(false), "A2");
-        putPiece(new King(false), "A1");
     }
+
+    private void addPieces(ArrayList<IPiece> pieces, ArrayList<Coordinate> co) {
+        if(pieces.size() != co.size()) throw new IllegalArgumentException("each pawn needs to have assigned coordinate");
+        for (int i = 0; i < pieces.size() - 1; i++) {
+            IPiece p = pieces.get(i);
+            Coordinate c = co.get(i);
+            if(!c.isLegit()) throw new IllegalArgumentException("coordinate needs to be legit");
+            if(p != null) putPiece(p, c.toString());
+        }
+    }
+
+    public Board(String strf) {
+        this();
+        ForsythEdwards f = new ForsythEdwards(strf);
+        addPieces(f.getPieces(), f.getCoordonateList());
+    }
+
 
     private void setWhiteKing(IPiece piece) {
         whiteKing = piece;

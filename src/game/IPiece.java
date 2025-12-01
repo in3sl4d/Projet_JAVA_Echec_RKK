@@ -1,7 +1,6 @@
-package piece;
+package game;
 
 import move.Move;
-import game.Board;
 import move.coordinate.Coordinate;
 
 import java.util.ArrayList;
