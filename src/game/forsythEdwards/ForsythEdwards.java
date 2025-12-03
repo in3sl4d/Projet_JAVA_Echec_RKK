@@ -13,6 +13,8 @@ public class ForsythEdwards {
     private ArrayList<Coordinate> coordonateList;
     private ArrayList<IPiece> pieces;
 
+    private boolean isWhiteTurn = true;
+
     public ForsythEdwards(String fen) {
 
         coordonateList = new ArrayList<>();
@@ -41,8 +43,12 @@ public class ForsythEdwards {
             y++;
 
         }
+
+        String[] s = fen.split(" ");
+        if (s[1].equals("b")) isWhiteTurn = false;
     }
 
     public ArrayList<IPiece> getPieces() { return pieces; }
     public ArrayList<Coordinate> getCoordonateList() { return coordonateList; }
+    public boolean isWhiteTurn() { return isWhiteTurn; }
 }

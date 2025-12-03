@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Game {
 
-    private Board board;
+    private final Board board;
 
     public Game() {
         board = new Board();
@@ -65,4 +65,49 @@ public class Game {
 
         return true;
     }
+
+    public ArrayList<Move> allLegalMoves(Coordinate c) {
+        IPiece p = board.getPieceAt(c);
+        ArrayList<Move> legalMoves = new ArrayList<>();
+        if(p == null) return legalMoves;
+        for (Move m : p.allMoves(board, c))
+        {
+            if(!willBeChecked(p.getIsWhite(), m)) legalMoves.add(m);
+        }
+        return legalMoves;
+    }
+
+    public ArrayList<Move> allLegalMoves(boolean isWhite) {
+        ArrayList<Move> legalMoves = new ArrayList<>();
+        ArrayList<IPiece> pieces = board.getAllColorPieces(isWhite);
+        for (IPiece p : pieces) {
+            legalMoves.addAll(allLegalMoves(board.getPieceCoordiante(p)));
+        }
+        return legalMoves;
+    }
+
+    public ArrayList<Move> allLegalMoves() {
+        ArrayList<Move> legalMoves = new ArrayList<>();
+        legalMoves.addAll(allLegalMoves(false));
+        legalMoves.addAll(allLegalMoves(true));
+        return legalMoves;
+    }
+
+    public boolean canMovePiece(Move m) {
+        IPiece piece = board.getPieceAt(m.getGo());
+        if(piece == null) return false;
+        ArrayList<Move> allLegalMove = allLegalMoves(m.getGo());
+        if(allLegalMove == null) return false;
+        for (Move m2 : allLegalMove) {
+            if(m.isSame(m2)) return true;
+        }
+        return false;
+    }
+
+    public void play(Move m) {
+        if(!canMovePiece(m)) throw new IllegalMoveExecption("can't move piece");
+        board.movePieceWithoutRestriction(m);
+        board.changeTurn();
+    }
+
 }

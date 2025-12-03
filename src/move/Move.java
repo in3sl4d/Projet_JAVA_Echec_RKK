@@ -81,4 +81,8 @@ public class Move{
     public Coordinate getTo() {
         return to;
     }
+
+    public boolean isSame(Move m) {
+        return toString().equals(m.toString());
+    }
 }

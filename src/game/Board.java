@@ -15,6 +15,7 @@ public class Board {
     private ArrayList<IPiece> allBlackPieces;
     private IPiece whiteKing;
     private IPiece blackKing;
+    private boolean isWhiteTurn = true;
 
     public Board() {
         board = new IPiece[BOARD_SIZE][BOARD_SIZE];
@@ -26,6 +27,7 @@ public class Board {
         this();
         ForsythEdwards f = new ForsythEdwards(strf);
         addPieces(f.getPieces(), f.getCoordonateList());
+        isWhiteTurn = f.isWhiteTurn();
     }
 
     public Board(Board other) {
@@ -50,6 +52,7 @@ public class Board {
         }
     }
 
+    public void changeTurn(){ isWhiteTurn = !isWhiteTurn; }
 
     private void addPieces(ArrayList<IPiece> pieces, ArrayList<Coordinate> co) {
         if(pieces.size() != co.size()) throw new IllegalArgumentException("each pawn needs to have assigned coordinate");
@@ -72,12 +75,16 @@ public class Board {
     private void putPiece(IPiece piece, String coordinate) {
         int[] c = Coordinate.stringToCoordinate(coordinate);
         if (piece instanceof King) {
-            if(piece.getIsWhite()) setWhiteKing(piece);
+            if (piece.getIsWhite()) setWhiteKing(piece);
             else setBlackKing(piece);
         }
         board[c[0]][c[1]] = piece;
-        if(piece != null && piece.getIsWhite()) allWhitePieces.add(piece);
-        else if (piece != null && !piece.getIsWhite()) allBlackPieces.add(piece);
+        if (piece != null) {
+            ArrayList<IPiece> list = piece.getIsWhite() ? allWhitePieces : allBlackPieces;
+            if (!list.contains(piece)) {
+                list.add(piece);
+            }
+        }
     }
 
     private void removePiece(IPiece piece) {
@@ -119,6 +126,7 @@ public class Board {
         return null;
     }
 
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -137,15 +145,30 @@ public class Board {
         return sb.toString();
     }
 
-    public ArrayList<IPiece> getAllWhitePieces() {
-        return allWhitePieces;
+    private void reset()
+    {
+        board = new IPiece[BOARD_SIZE][BOARD_SIZE];
+        allWhitePieces = new ArrayList<>();
+        allBlackPieces = new ArrayList<>();
+        whiteKing = null;
+        blackKing = null;
     }
 
-    public ArrayList<IPiece> getAllBlackPieces() {
-        return allBlackPieces;
+    public void loadFen(String startFen) {
+        reset();
+        ForsythEdwards f = new ForsythEdwards(startFen);
+        addPieces(f.getPieces(), f.getCoordonateList());
+        isWhiteTurn = f.isWhiteTurn();
     }
 
-    public ArrayList<IPiece> getAllColorPieces(boolean isWhite) {
-        return isWhite ? allWhitePieces : allBlackPieces;
-    }
+    public ArrayList<IPiece> getAllWhitePieces() { return allWhitePieces; }
+
+    public ArrayList<IPiece> getAllBlackPieces() { return allBlackPieces;  }
+
+    public ArrayList<IPiece> getAllColorPieces(boolean isWhite) {   return isWhite ? allWhitePieces : allBlackPieces; }
+
+    public boolean isWhiteTurn() { return isWhiteTurn; }
+
+
+
 }
