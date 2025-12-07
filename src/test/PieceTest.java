@@ -257,6 +257,52 @@ class PieceTest {
         Assertions.assertFalse(canGoBehindEnemy, "S'arrête après la capture (ne va pas en b2)");
     }
 
+    @Test
+    void testQueenCenterEmptyBoard() {
+        Board board = new Board();
+        board.loadFen("8/8/8/8/3Q4/8/8/8 w");
 
+        Coordinate center = new Coordinate("d4");
+        IPiece queen = board.getPieceAt(center);
+
+        ArrayList<Move> moves = queen.allMoves(board, center);
+
+        Assertions.assertEquals(27, moves.size(), "La reine au centre doit avoir 27 mouvements");
+    }
+
+    @Test
+    void testQueenCorner() {
+        Board board = new Board();
+        board.loadFen("8/8/8/8/8/8/8/Q7 w");
+
+        Coordinate corner = new Coordinate("a1");
+        IPiece queen = board.getPieceAt(corner);
+
+        ArrayList<Move> moves = queen.allMoves(board, corner);
+
+        Assertions.assertEquals(21, moves.size());
+    }
+
+    @Test
+    void testQueenMixedCaptureAndBlock() {
+        Board board = new Board();
+        board.loadFen("8/6p1/8/3P4/3Q4/8/8/8 w");
+
+        Coordinate start = new Coordinate("d4");
+        IPiece queen = board.getPieceAt(start);
+        ArrayList<Move> moves = queen.allMoves(board, start);
+
+        boolean canGoUp = moves.stream().anyMatch(m -> m.getTo().toString().equals("d5"));
+        boolean canGoThrough = moves.stream().anyMatch(m -> m.getTo().toString().equals("d6"));
+
+        Assertions.assertFalse(canGoUp, "Bloquée par le pion ami devant elle");
+        Assertions.assertFalse(canGoThrough, "Ne peut pas sauter par-dessus l'ami");
+
+        boolean canCapture = moves.stream().anyMatch(m -> m.getTo().toString().equals("g7"));
+        boolean canGoBehind = moves.stream().anyMatch(m -> m.getTo().toString().equals("h8"));
+
+        Assertions.assertTrue(canCapture, "Doit pouvoir manger en diagonale (g7)");
+        Assertions.assertFalse(canGoBehind, "S'arrête après la capture (pas de h8)");
+    }
 
 }

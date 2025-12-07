@@ -17,6 +17,8 @@ public class PieceFactory {
                 return new Knight(isWhite);
             case "b":
                 return new Bishop(isWhite);
+            case "q":
+                return new Queen(isWhite);
             default:
                 return null;
         }
