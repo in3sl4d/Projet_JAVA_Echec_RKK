@@ -15,6 +15,8 @@ public class PieceFactory {
                 return new Pawn(isWhite);
             case "n":
                 return new Knight(isWhite);
+            case "b":
+                return new Bishop(isWhite);
             default:
                 return null;
         }

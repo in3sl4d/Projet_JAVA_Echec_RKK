@@ -220,5 +220,43 @@ class PieceTest {
         Assertions.assertTrue(canJumpToC2);
     }
 
+    @Test
+    void testBishopFreeMovement() {
+        Board board = new Board();
+        board.loadFen("8/8/8/8/3B4/8/8/8 w");
+
+        Coordinate center = new Coordinate("d4");
+        IPiece bishop = board.getPieceAt(center);
+
+        ArrayList<Move> moves = bishop.allMoves(board, center);
+
+        // Diagonales complètes : 7 cases (a1-h8) + 6 cases (a7-g1) = 13 cases
+        Assertions.assertEquals(13, moves.size());
+    }
+
+    @Test
+    void testBishopBlockedAndCapture() {
+
+        Board board = new Board();
+        board.loadFen("8/8/8/4P3/3B4/2p5/8/8 w");
+
+        Coordinate start = new Coordinate("d4");
+        IPiece bishop = board.getPieceAt(start);
+        ArrayList<Move> moves = bishop.allMoves(board, start);
+
+        boolean canGoToFriend = moves.stream().anyMatch(m -> m.getTo().toString().equals("e5"));
+        boolean canGoBehindFriend = moves.stream().anyMatch(m -> m.getTo().toString().equals("f6"));
+
+        Assertions.assertFalse(canGoToFriend, "Ne doit pas manger son ami en e5");
+        Assertions.assertFalse(canGoBehindFriend, "Ne doit pas sauter par-dessus son ami en f6");
+
+        boolean canCaptureEnemy = moves.stream().anyMatch(m -> m.getTo().toString().equals("c3"));
+        boolean canGoBehindEnemy = moves.stream().anyMatch(m -> m.getTo().toString().equals("b2"));
+
+        Assertions.assertTrue(canCaptureEnemy, "Doit pouvoir manger l'ennemi en c3");
+        Assertions.assertFalse(canGoBehindEnemy, "S'arrête après la capture (ne va pas en b2)");
+    }
+
+
 
 }
