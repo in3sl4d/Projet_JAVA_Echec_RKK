@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class UCI {
 
     // Position RKk par défaut
-    private static final String START_FEN = "8/3K2R1/8/8/8/8/8/3k4 w - - 0 1";
+    private static final String START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -110,10 +110,7 @@ public class UCI {
             Move m = new Move(go, to);
 
             // On joue le coup sur le plateau
-            game.getBoard().movePieceWithoutRestriction(m);
-            // On inverse le tour manuellement car movePieceWithoutRestriction ne le fait pas
-            game.getBoard().changeTurn();
-
+            game.play(m);
         } catch (Exception e) {
             System.out.println("info string Erreur move non valide: " + uciMove);
         }
