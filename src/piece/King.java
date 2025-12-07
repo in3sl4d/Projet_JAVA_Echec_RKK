@@ -7,18 +7,15 @@ import move.coordinate.Coordinate;
 
 import java.util.ArrayList;
 
-public class King implements IPiece {
-
-    private boolean isWhite;
+public class King extends Piece implements IPiece {
 
     public King(boolean isWhite) {
-        this.isWhite = isWhite;
+        super(isWhite, "K");
     }
 
     @Override
     public ArrayList<Move> allMoves(Board board, Coordinate coord) {
         ArrayList<Move> moves = new ArrayList<>();
-        IPiece actuelle = null;
         int x =  coord.getX(), y = coord.getY();
         int[] xx = {1, 1, 1, 0 ,0 ,-1 ,-1 ,-1};
         int[] yy = {0, -1, 1, 1 ,-1 ,0, -1 ,1};
@@ -29,21 +26,11 @@ public class King implements IPiece {
                 if (board.getPieceAt(c) == null) moves.add(new Move(coord, c));
                 else {
                     IPiece p = board.getPieceAt(c);
-                    if(p.getIsWhite() != isWhite) moves.add(new Move(coord, c));
+                    if(p.getIsWhite() != super.getIsWhite()) moves.add(new Move(coord, c));
                 }
             }
         }
         return moves;
-    }
-
-    @Override
-    public boolean getIsWhite() {
-        return isWhite;
-    }
-
-    public String toString()
-    {
-        return "K" + (isWhite ? "W" : "B");
     }
 
 }

@@ -55,4 +55,120 @@ class PieceTest {
         Assertions.assertEquals(3, king.allMoves(board, a1).size());
     }
 
+    @Test
+    void testWhitePawnStartingPosition() {
+        Board board = new Board();
+        board.loadFen("8/8/8/8/8/8/4P3/8 w");
+
+        Coordinate start = new Coordinate("e2");
+        IPiece pawn = board.getPieceAt(start);
+        ArrayList<Move> moves = pawn.allMoves(board, start);
+
+        Assertions.assertEquals(2, moves.size(), "Un pion au départ devrait avoir 2 mouvements si la voie est libre");
+
+        boolean canGoOneStep = moves.stream().anyMatch(m -> m.getTo().toString().equals("e3"));
+        boolean canGoTwoSteps = moves.stream().anyMatch(m -> m.getTo().toString().equals("e4"));
+
+        Assertions.assertTrue(canGoOneStep, "Devrait pouvoir avancer de 1 case");
+        Assertions.assertTrue(canGoTwoSteps, "Devrait pouvoir avancer de 2 cases au départ");
+    }
+
+    @Test
+    void testBlackPawnStartingPosition() {
+        Board board = new Board();
+        board.loadFen("8/3p4/8/8/8/8/8/8 b");
+
+        Coordinate start = new Coordinate("d7");
+        IPiece pawn = board.getPieceAt(start);
+        ArrayList<Move> moves = pawn.allMoves(board, start);
+
+        Assertions.assertEquals(2, moves.size());
+
+        boolean canGoOneStep = moves.stream().anyMatch(m -> m.getTo().toString().equals("d6"));
+        boolean canGoTwoSteps = moves.stream().anyMatch(m -> m.getTo().toString().equals("d5"));
+
+        Assertions.assertTrue(canGoOneStep, "Le pion noir devrait descendre de 1");
+        Assertions.assertTrue(canGoTwoSteps, "Le pion noir devrait descendre de 2 au départ");
+    }
+
+    @Test
+    void testPawnBlockedStraight() {
+        // Scénario : Pion blanc en e2, bloqué par un pion noir en e3.
+        // Attendu : 0 mouvement (ne peut ni avancer, ni sauter).
+        Board board = new Board();
+        board.loadFen("8/8/8/8/8/4p3/4P3/8 w");
+
+        Coordinate start = new Coordinate("e2");
+        IPiece pawn = board.getPieceAt(start);
+        ArrayList<Move> moves = pawn.allMoves(board, start);
+
+        Assertions.assertEquals(0, moves.size(), "Le pion devrait être totalement bloqué");
+    }
+
+    @Test
+    void testPawnBlockedOnDoubleStep() {
+        // Scénario : Pion blanc en e2, case e3 libre, mais case e4 occupée.
+        // Attendu : 1 mouvement (e3) seulement. Pas de saut par-dessus.
+        Board board = new Board();
+        board.loadFen("8/8/8/8/4p3/8/4P3/8 w"); // Pion noir bloque e4
+
+        Coordinate start = new Coordinate("e2");
+        IPiece pawn = board.getPieceAt(start);
+        ArrayList<Move> moves = pawn.allMoves(board, start);
+
+        boolean canGoOneStep = moves.stream().anyMatch(m -> m.getTo().toString().equals("e3"));
+        boolean canGoTwoSteps = moves.stream().anyMatch(m -> m.getTo().toString().equals("e4"));
+
+        Assertions.assertTrue(canGoOneStep);
+        Assertions.assertFalse(canGoTwoSteps, "Ne peut pas aller en e4 car la case est occupée");
+    }
+
+    @Test
+    void testPawnCaptureLogic() {
+        Board board = new Board();
+        board.loadFen("8/8/8/2p1p3/3P4/8/8/8 w");
+
+        Coordinate start = new Coordinate("d4");
+        IPiece pawn = board.getPieceAt(start);
+        ArrayList<Move> moves = pawn.allMoves(board, start);
+
+        Assertions.assertEquals(3, moves.size());
+
+        boolean captureLeft = moves.stream().anyMatch(m -> m.getTo().toString().equals("c5"));
+        boolean moveForward = moves.stream().anyMatch(m -> m.getTo().toString().equals("d5"));
+        boolean captureRight = moves.stream().anyMatch(m -> m.getTo().toString().equals("e5"));
+
+        Assertions.assertTrue(captureLeft, "Devrait pouvoir manger à gauche");
+        Assertions.assertTrue(moveForward, "Devrait pouvoir avancer");
+        Assertions.assertTrue(captureRight, "Devrait pouvoir manger à droite");
+    }
+
+    @Test
+    void testPawnCannotCaptureStraight() {
+        Board board = new Board();
+        board.loadFen("8/8/8/8/4p3/4P3/8/8 w");
+
+        Coordinate start = new Coordinate("e3");
+        IPiece pawn = board.getPieceAt(start);
+        ArrayList<Move> moves = pawn.allMoves(board, start);
+
+        // Si la liste n'est pas vide, vérifions qu'il n'essaie pas d'aller en e4
+        boolean attacksStraight = moves.stream().anyMatch(m -> m.getTo().toString().equals("e4"));
+        Assertions.assertFalse(attacksStraight, "Un pion ne peut pas manger tout droit");
+        Assertions.assertEquals(0, moves.size());
+    }
+
+    @Test
+    void testPawnCannotCaptureFriendly() {
+        Board board = new Board();
+        board.loadFen("8/8/8/4P3/3P4/8/8/8 w");
+
+        Coordinate start = new Coordinate("d4");
+        IPiece pawn = board.getPieceAt(start);
+        ArrayList<Move> moves = pawn.allMoves(board, start);
+
+        boolean attacksFriendly = moves.stream().anyMatch(m -> m.getTo().toString().equals("e5"));
+        Assertions.assertFalse(attacksFriendly, "Ne peut pas manger un allié");
+    }
+
 }

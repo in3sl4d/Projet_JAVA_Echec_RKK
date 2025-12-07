@@ -2,11 +2,9 @@ package game.forsythEdwards;
 
 import move.coordinate.Coordinate;
 import game.IPiece;
-import piece.PieceFactorie;
+import piece.PieceFactory;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class ForsythEdwards {
 
@@ -38,7 +36,7 @@ public class ForsythEdwards {
             }
             boolean isWhite = Character.isUpperCase(c);
             char type = Character.toLowerCase(c);
-            pieces.add(PieceFactorie.createPiece(String.valueOf(type), isWhite));
+            pieces.add(PieceFactory.createPiece(String.valueOf(type), isWhite));
             coordonateList.add(new Coordinate(x, y));
             y++;
 

@@ -7,12 +7,11 @@ import move.coordinate.Coordinate;
 
 import java.util.ArrayList;
 
-public class Rook implements IPiece {
+public class Rook extends Piece implements IPiece {
 
-    private boolean isWhite;
 
     public Rook(boolean isWhite) {
-        this.isWhite = isWhite;
+        super(isWhite, "R");
     }
 
     @Override
@@ -38,7 +37,7 @@ public class Rook implements IPiece {
                     {
                         moves.add(new Move(coord, c));
                     }
-                    else if(p.getIsWhite() == isWhite) break;
+                    else if(p.getIsWhite() == super.getIsWhite()) break;
                     else {
                         moves.add(new Move(coord, c));
                         break;
@@ -53,14 +52,5 @@ public class Rook implements IPiece {
         return moves;
     }
 
-    @Override
-    public boolean getIsWhite() {
-        return isWhite;
-    }
-
-    public String toString()
-    {
-        return "R" + (isWhite ? "W" : "B");
-    }
 
 }
