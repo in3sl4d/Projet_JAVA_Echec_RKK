@@ -13,6 +13,8 @@ public class PieceFactory {
                 return new Rook(isWhite);
             case "p":
                 return new Pawn(isWhite);
+            case "n":
+                return new Knight(isWhite);
             default:
                 return null;
         }

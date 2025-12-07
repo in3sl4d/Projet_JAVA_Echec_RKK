@@ -152,7 +152,6 @@ class PieceTest {
         IPiece pawn = board.getPieceAt(start);
         ArrayList<Move> moves = pawn.allMoves(board, start);
 
-        // Si la liste n'est pas vide, vérifions qu'il n'essaie pas d'aller en e4
         boolean attacksStraight = moves.stream().anyMatch(m -> m.getTo().toString().equals("e4"));
         Assertions.assertFalse(attacksStraight, "Un pion ne peut pas manger tout droit");
         Assertions.assertEquals(0, moves.size());
@@ -170,5 +169,56 @@ class PieceTest {
         boolean attacksFriendly = moves.stream().anyMatch(m -> m.getTo().toString().equals("e5"));
         Assertions.assertFalse(attacksFriendly, "Ne peut pas manger un allié");
     }
+
+    @Test
+    void testKnightMovement() {
+        // Scénario : Cavalier blanc au centre (d4).
+        // Attendu : 8 mouvements possibles sur un plateau vide.
+        Board board = new Board();
+        board.loadFen("8/8/8/8/3N4/8/8/8 w");
+
+        Coordinate center = new Coordinate("d4");
+        IPiece knight = board.getPieceAt(center);
+
+        Assertions.assertEquals(8, knight.allMoves(board, center).size());
+    }
+
+    @Test
+    void testKnightCorner() {
+        Board board = new Board();
+        board.loadFen("8/8/8/8/8/8/8/N7 w");
+
+        Coordinate corner = new Coordinate("a1");
+        IPiece knight = board.getPieceAt(corner);
+
+        ArrayList<Move> moves = knight.allMoves(board, corner);
+        Assertions.assertEquals(2, moves.size());
+
+        boolean b3 = moves.stream().anyMatch(m -> m.getTo().toString().equals("b3"));
+        boolean c2 = moves.stream().anyMatch(m -> m.getTo().toString().equals("c2"));
+
+        Assertions.assertTrue(b3);
+        Assertions.assertTrue(c2);
+    }
+
+    @Test
+    void testKnightJumping() {
+        Board board = new Board();
+        board.loadFen("8/8/8/8/8/8/PP6/N7 w");
+
+        Coordinate start = new Coordinate("a1");
+        IPiece knight = board.getPieceAt(start);
+        ArrayList<Move> moves = knight.allMoves(board, start);
+
+        boolean canJumpToB3 = moves.stream().anyMatch(m -> m.getTo().toString().equals("b3"));
+
+        // Cela va maintenant passer à TRUE car b3 est vide
+        Assertions.assertTrue(canJumpToB3, "Le cavalier doit pouvoir aller en b3 même s'il est entouré en a2/b2");
+
+        // Vérifions aussi l'autre mouvement possible (c2)
+        boolean canJumpToC2 = moves.stream().anyMatch(m -> m.getTo().toString().equals("c2"));
+        Assertions.assertTrue(canJumpToC2);
+    }
+
 
 }
