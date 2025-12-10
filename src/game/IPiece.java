@@ -11,5 +11,6 @@ public interface IPiece {
 
     boolean getIsWhite();
 
+    String toString();
 
 }

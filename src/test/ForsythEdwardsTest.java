@@ -1,5 +1,6 @@
 package test;
 
+import game.Board;
 import game.forsythEdwards.ForsythEdwards;
 import game.IPiece;
 import move.coordinate.Coordinate;
@@ -34,6 +35,14 @@ class ForsythEdwardsTest {
         Assertions.assertNotEquals(-1, indexRook, "Il doit y avoir une pièce en d4");
         Assertions.assertTrue(pieces.get(indexRook) instanceof Rook);
         Assertions.assertTrue(pieces.get(indexRook).getIsWhite());
+    }
+
+    @Test
+    void testboardToFen()
+    {
+        Board board = new Board("r5k1/8/8/8/3R4/8/8/K7 w");
+        System.out.println(board);
+        Assertions.assertEquals("r5k1/8/8/8/3R4/8/8/K7 w - - 0 1", ForsythEdwards.boardToFen(board));
     }
 
 }

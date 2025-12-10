@@ -13,6 +13,10 @@ public class Game {
         board = new Board();
     }
 
+    public Game(Board board) {
+        this.board = new Board(board);
+    }
+
     public Game(String str) {board = new Board(str);}
 
     public String toString()

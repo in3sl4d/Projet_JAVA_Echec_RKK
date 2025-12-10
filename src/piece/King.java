@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class King extends Piece implements IPiece {
 
     public King(boolean isWhite) {
-        super(isWhite, "K");
+        super(isWhite, "k");
     }
 
     @Override

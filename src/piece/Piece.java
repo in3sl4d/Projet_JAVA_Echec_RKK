@@ -24,7 +24,7 @@ public abstract class Piece implements IPiece {
 
     public String toString()
     {
-        return repre + (isWhite ? "W" : "B");
+        return repre;
     }
 
     protected ArrayList<Move> getMovesDirection(int[] xDirection, int[] yDirection, Coordinate coord, Board board) {

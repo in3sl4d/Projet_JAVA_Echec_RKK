@@ -11,7 +11,7 @@ public class Rook extends Piece implements IPiece {
 
 
     public Rook(boolean isWhite) {
-        super(isWhite, "R");
+        super(isWhite, "r");
     }
 
     @Override

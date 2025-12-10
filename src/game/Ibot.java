@@ -1,6 +1,5 @@
-package ia;
+package game;
 
-import game.Game;
 import move.Move;
 
 public interface Ibot {

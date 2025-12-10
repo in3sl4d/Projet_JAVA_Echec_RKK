@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class Board {
 
-    private final static int BOARD_SIZE = 8;
+    public final static int BOARD_SIZE = 8;
     private IPiece[][] board;
     private ArrayList<IPiece> allWhitePieces;
     private ArrayList<IPiece> allBlackPieces;
@@ -28,7 +28,7 @@ public class Board {
         ForsythEdwards f = new ForsythEdwards(strf);
         addPieces(f.getPieces(), f.getCoordonateList());
         isWhiteTurn = f.isWhiteTurn();
-    }
+    };;
 
     public Board(Board other) {
         this.board = new IPiece[8][8];

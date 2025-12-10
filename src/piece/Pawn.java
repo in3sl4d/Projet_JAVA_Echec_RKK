@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Pawn extends Piece implements IPiece {
 
     public Pawn(boolean isWhite) {
-        super(isWhite, "P");
+        super(isWhite, "p");
     }
 
     @Override
