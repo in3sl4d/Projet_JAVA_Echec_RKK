@@ -12,7 +12,7 @@ public class UCI {
 
     // Position RKk par défaut
     private static final String START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-    private static Ibot bot = new Bot(3);
+    private static Ibot bot = new Bot(4);
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);

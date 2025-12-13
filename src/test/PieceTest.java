@@ -57,6 +57,25 @@ class PieceTest {
     }
 
     @Test
+    void testKingCoin(){
+        Board board = new Board(new ForsythEdwards("8/7k/8/8/K7/8/8/8 b - - 0 1"));
+        Coordinate a4 = new Coordinate("a4");
+        IPiece king = board.getPieceAt(a4);
+
+        Assertions.assertEquals(5, king.allMoves(board, a4).size());
+    }
+
+    @Test
+    void testKingCenter()
+    {
+        Board board = new Board(new ForsythEdwards("8/7k/8/8/4K3/8/8/8 b - - 0 1"));
+        Coordinate e4 = new Coordinate("e4");
+        IPiece king = board.getPieceAt(e4);
+
+        Assertions.assertEquals(8, king.allMoves(board, e4).size());
+    }
+
+    @Test
     void testWhitePawnStartingPosition() {
         Board board = new Board();
         board.loadGame(new ForsythEdwards("8/8/8/8/8/8/4P3/8 w"));

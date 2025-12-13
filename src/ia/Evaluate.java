@@ -3,10 +3,16 @@ package ia;
 import game.Board;
 import game.IPiece;
 import move.coordinate.Coordinate;
+import piece.PieceType;
 
 import java.util.HashMap;
 
 public class Evaluate {
+
+    private static final double WEIGHT_MATERIAL = 1.0;   // Le plus important (ne pas perdre de pièces)
+    private static final double WEIGHT_POSITION = 0.8;   // Très important (contrôler le centre)
+    private static final double WEIGHT_MOBILITY = 0.1;   // Très faible ! (juste pour départager deux bons coups)
+    private static final double WEIGHT_STRUCTURE = 0.5;
 
     private static final int ISOLATED_PAWN_PENALTY = -15;
     private static final int DOUBLED_PAWN_PENALTY = -10;
@@ -49,14 +55,14 @@ public class Evaluate {
         int[] pawnsPerCol = new int[Board.BOARD_SIZE];
 
         for (IPiece p : b.getAllColorPieces(isWhite)) {
-            if (p.toString().equalsIgnoreCase("p")) {
+            if (p.getType() == PieceType.PAWN) {
                 Coordinate c = b.getPieceCoordiante(p);
                 pawnsPerCol[c.getX()]++;
             }
         }
 
         for (IPiece p : b.getAllColorPieces(isWhite)) {
-            if (p.toString().equalsIgnoreCase("p")) {
+            if (p.getType() == PieceType.PAWN) {
                 Coordinate c = b.getPieceCoordiante(p);
                 int x = c.getX();
                 int y = c.getY();
@@ -119,7 +125,7 @@ public class Evaluate {
         Coordinate kPos = null;
 
         for (IPiece p : b.getAllColorPieces(isWhite)) {
-            if (p.toString().equalsIgnoreCase("k")) {
+            if (p.getType() == PieceType.KING) {
                 king = p;
                 kPos = b.getPieceCoordiante(p);
                 break;
@@ -152,7 +158,7 @@ public class Evaluate {
     private static int evaluateRooks(Board b, boolean isWhite) {
         int score = 0;
         for (IPiece p : b.getAllColorPieces(isWhite)) {
-            if (p.toString().equalsIgnoreCase("r")) {
+            if (p.getType() == PieceType.ROOK) {
                 Coordinate c = b.getPieceCoordiante(p);
                 if (isFileOpen(b, c.getX())) {
                     score += 40;
@@ -167,7 +173,7 @@ public class Evaluate {
     private static boolean isFileOpen(Board b, int col) {
         for (int row = 0; row < 8; row++) {
             IPiece p = b.getPieceAt(new Coordinate(col, row));
-            if (p != null && p.toString().equalsIgnoreCase("p")) return false;
+            if (p != null && p.getType() == PieceType.PAWN) return false;
         }
         return true;
     }
@@ -175,7 +181,7 @@ public class Evaluate {
     private static boolean isFileSemiOpen(Board b, int col, boolean isWhite) {
         for (int row = 0; row < 8; row++) {
             IPiece p = b.getPieceAt(new Coordinate(col, row));
-            if (p != null && p.toString().equalsIgnoreCase("p") && p.getIsWhite() == isWhite) return false;
+            if (p != null && p.getType() == PieceType.PAWN && p.getIsWhite() == isWhite) return false;
         }
         return true;
     }
@@ -183,7 +189,7 @@ public class Evaluate {
     private static int evaluateBishopPair(Board b, boolean isWhite) {
         int bishopCount = 0;
         for (IPiece p : b.getAllColorPieces(isWhite)) {
-            if (p.toString().equalsIgnoreCase("b")) {
+            if (p.getType() == PieceType.BISHOP) {
                 bishopCount++;
             }
         }
@@ -193,16 +199,16 @@ public class Evaluate {
 
     public static int evaluate(Board b)
     {
-        int whiteScore = getPieceScore(b, true) + evaluateMobility(b, true) +
-                evaluatePawnStructure(b, true) + evaluateKingSafety(b, true)
+        double whiteScore = WEIGHT_MATERIAL * getPieceScore(b, true)  + WEIGHT_MOBILITY * evaluateMobility(b, true)  +
+                 WEIGHT_STRUCTURE * evaluatePawnStructure(b, true) + evaluateKingSafety(b, true)
                 + evaluateRooks(b, true) + evaluateBishopPair(b, true);
 
-        int blackScore = getPieceScore(b, false) + evaluateMobility(b, false)
-                + evaluatePawnStructure(b, false) + evaluateKingSafety(b, false)
+        double blackScore = WEIGHT_MATERIAL * getPieceScore(b, false)  + WEIGHT_MOBILITY * evaluateMobility(b, false)
+                + WEIGHT_STRUCTURE * evaluatePawnStructure(b, false) + evaluateKingSafety(b, false)
                 + evaluateRooks(b, false) + evaluateBishopPair(b, false);
 
-        int evaluation = b.isWhiteTurn() ? whiteScore - blackScore : blackScore - whiteScore;
-        return evaluation;
+        int finalScore = (int)(whiteScore - blackScore);
+        return b.isWhiteTurn() ? finalScore : -finalScore;
     }
 
 }
