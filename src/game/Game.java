@@ -2,6 +2,7 @@ package game;
 
 import move.Move;
 import move.coordinate.Coordinate;
+import piece.PieceType;
 
 import java.util.ArrayList;
 
@@ -124,8 +125,44 @@ public class Game {
 
     public void play(Move m) {
         if(!canMovePiece(m)) throw new IllegalMoveExecption("can't move piece");
+
+        IPiece pieceMoved = board.getPieceAt(m.getGo());
+        updateCastlingRights(pieceMoved, m.getGo());
+
+        IPiece pieceCaptured = board.getPieceAt(m.getTo());
+        if (pieceCaptured != null) {
+            // On passe la pièce capturée et SA position (m.getTo())
+            updateCastlingRights(pieceCaptured, m.getTo());
+        }
         board.movePieceWithoutRestriction(m);
         board.changeTurn();
     }
 
+    private void updateCastlingRights(IPiece p, Coordinate c) {
+        if (p.getType() == PieceType.KING) {
+            if (p.getIsWhite()) {
+                board.setCastlingRight("K", false);
+                board.setCastlingRight("Q", false);
+            } else {
+                board.setCastlingRight("k", false);
+                board.setCastlingRight("q", false);
+            }
+        } else if (p.getType() == PieceType.ROOK) {
+            int x = c.getX();
+            int y = c.getY();
+
+            if (p.getIsWhite()) {
+                if (x == 0) {
+                    if (y == 0) board.setCastlingRight("Q", false); // Tour A1
+                    else if (y == 7) board.setCastlingRight("K", false); // Tour H1
+                }
+            } else {
+                // Tour Noire (Doit être sur la ligne 7)
+                if (x == 7) {
+                    if (y == 0) board.setCastlingRight("q", false); // Tour A8
+                    else if (y == 7) board.setCastlingRight("k", false); // Tour H8
+                }
+            }
+        }
+    }
 }

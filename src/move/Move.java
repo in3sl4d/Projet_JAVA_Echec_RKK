@@ -7,6 +7,16 @@ public class Move{
     private Coordinate go;
     private Coordinate to;
 
+    private Move nextMove = null;
+
+    public void setNextMove(Move nextMove) {
+        this.nextMove = nextMove;
+    }
+
+    public Move getNextMove() {
+        return nextMove;
+    }
+
     public Move(Coordinate go, Coordinate to) {
         this.go = go;
         this.to = to;

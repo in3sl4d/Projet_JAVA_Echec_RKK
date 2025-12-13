@@ -30,6 +30,21 @@ public class King extends Piece implements IPiece {
                 }
             }
         }
+
+        if(board.canCastle("K"))
+        {
+            if(board.getPieceAt(new Coordinate(x, 5)) == null && board.getPieceAt(new Coordinate(x, 6)) == null)
+            {
+                Move kingMove = new Move(coord, new Coordinate(x, 6));
+
+                Move rookMove = new Move(new Coordinate(x, 7), new Coordinate(x, 5));
+
+                kingMove.setNextMove(rookMove);
+                moves.add(kingMove);
+            }
+        }
+
+        //faire les autre rock
         return moves;
     }
 

@@ -3,7 +3,7 @@ package game;
 import game.forsythEdwards.ForsythEdwards;
 import move.Move;
 import move.coordinate.Coordinate;
-import piece.King;
+import piece.PieceType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +15,7 @@ public class Board {
     private ArrayList<IPiece> allWhitePieces;
     private ArrayList<IPiece> allBlackPieces;
     private boolean isWhiteTurn = true;
-    private HashMap<String, Boolean> canRock;
+    private HashMap<String, Boolean> canCastle;
 
     public Board() {
         board = new IPiece[BOARD_SIZE][BOARD_SIZE];
@@ -28,7 +28,7 @@ public class Board {
         this();
         addPieces(gameLoader.getPieces(), gameLoader.getCoordonateList());
         isWhiteTurn = gameLoader.isWhiteTurn();
-        canRock = gameLoader.getCanRock();
+        canCastle = gameLoader.getCanRock();
     }
 
     public Board(String strf) {
@@ -36,7 +36,7 @@ public class Board {
         ForsythEdwards f = new ForsythEdwards(strf);
         addPieces(f.getPieces(), f.getCoordonateList());
         isWhiteTurn = f.isWhiteTurn();
-    };;
+    };
 
     public Board(Board other) {
         this.board = new IPiece[8][8];
@@ -99,6 +99,9 @@ public class Board {
         removePiece(getPieceAt(to));
         putPiece(p, to.toString());
         putPiece(null, go.toString());
+        if(move.getNextMove() != null) {
+            movePieceWithoutRestriction(move.getNextMove());
+        }
     }
 
 
@@ -146,10 +149,6 @@ public class Board {
         isWhiteTurn = gameLoader.isWhiteTurn();
     }
 
-    public ArrayList<IPiece> getAllWhitePieces() { return allWhitePieces; }
-
-    public ArrayList<IPiece> getAllBlackPieces() { return allBlackPieces;  }
-
     public ArrayList<IPiece> getAllColorPieces(boolean isWhite) {   return isWhite ? allWhitePieces : allBlackPieces; }
 
     public boolean isWhiteTurn() { return isWhiteTurn; }
@@ -161,5 +160,25 @@ public class Board {
         return allPieces;
     }
 
+    public boolean canCastle(String Castel) {
+        return false;
+    }
 
+    public void setCastlingRight(String Castel, boolean isRight) {
+        if(canCastle.containsKey(Castel)) {
+            canCastle.replace(Castel, isRight);
+            return;
+        }
+        canCastle.put(Castel, isRight);
+    }
+
+    public boolean isControled(Coordinate c, boolean byColor) {
+        ArrayList<IPiece> allPieces = getAllColorPieces(byColor);
+        for (IPiece piece : allPieces)
+            if(piece.getType() != PieceType.KING && piece.getType() != PieceType.PAWN)
+                for(Move m : piece.allMoves(this, getPieceCoordiante(piece)))if(m.getTo().equals(c)) return true;
+
+
+        return false;
+    }
 }
