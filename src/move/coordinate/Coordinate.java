@@ -44,6 +44,7 @@ public class Coordinate {
     }
 
     public boolean isSame(Coordinate c) {
+        if(c == null) return false;
         return this.x == c.x && this.y == c.y;
     }
 

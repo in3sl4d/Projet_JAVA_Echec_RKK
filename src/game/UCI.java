@@ -1,5 +1,7 @@
 package game;
 
+import game.forsythEdwards.ForsythEdwards;
+import ia.Bot;
 import move.Move;
 import move.coordinate.Coordinate;
 import java.util.ArrayList;
@@ -10,12 +12,13 @@ public class UCI {
 
     // Position RKk par défaut
     private static final String START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    private static Ibot bot = new Bot(3);
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
         // Initialisation de départ
-        Game game = new Game(START_FEN);
+        Game game = new Game(new ForsythEdwards(START_FEN));
 
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine().trim();
@@ -36,7 +39,7 @@ public class UCI {
                     break;
 
                 case "ucinewgame":
-                    game = new Game(START_FEN);
+                    game = new Game(new ForsythEdwards(START_FEN));
                     break;
 
                 case "position":
@@ -62,7 +65,7 @@ public class UCI {
         // 1. Gérer la position de base (startpos ou fen)
         if (tokens[1].equals("startpos")) {
             // On recrée proprement un nouveau jeu
-            gameToUpdate = new Game(START_FEN);
+            gameToUpdate = new Game(new ForsythEdwards(START_FEN));
 
             // On cherche où commencent les coups
             for (int i = 2; i < tokens.length; i++) {
@@ -82,7 +85,7 @@ public class UCI {
             }
 
             // On crée le jeu avec ce FEN spécifique
-            gameToUpdate = new Game(fen.toString().trim());
+            gameToUpdate = new Game(new ForsythEdwards(fen.toString().trim()));
 
             if (i < tokens.length && tokens[i].equals("moves")) {
                 movesIndex = i + 1;
@@ -126,8 +129,8 @@ public class UCI {
         ArrayList<Move> allLegalMoves = game.allLegalMoves(isWhite);
 
         if (!allLegalMoves.isEmpty()) {
-            Move randomMove = allLegalMoves.get(new Random().nextInt(allLegalMoves.size()));
-            System.out.println("bestmove " + moveToUciString(randomMove));
+            Move bestMove = bot.bestMove(game, isWhite);
+            System.out.println("bestmove " + moveToUciString(bestMove));
         } else {
             // Si aucun coup, c'est mat ou pat
             System.out.println("bestmove 0000");

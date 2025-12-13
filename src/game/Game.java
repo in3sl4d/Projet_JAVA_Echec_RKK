@@ -17,7 +17,7 @@ public class Game {
         this.board = new Board(board);
     }
 
-    public Game(String str) {board = new Board(str);}
+    public Game(IGameLoader loader) { board = new Board(loader); }
 
     public String toString()
     {
@@ -28,18 +28,27 @@ public class Game {
         return board;
     }
 
-    public boolean isChecked(boolean isWhite, Board board) {
-        Coordinate rc = board.getKingCoordinate(isWhite);
-        ArrayList<IPiece> allP = board.getAllColorPieces(!isWhite);
+    public boolean isChecked(Coordinate cc, Board board) {
+        IPiece pp = board.getPieceAt(cc);
+        if(pp == null) return false;
+        if(!pp.canBeChecked()) return false;
+        ArrayList<IPiece> allP = board.getAllColorPieces(!pp.getIsWhite());
         for (IPiece p : allP) {
             Coordinate c = board.getPieceCoordiante(p);
             if(c == null) continue;
             for (Move m : p.allMoves(board, c))
             {
-                if(m.getTo().isSame(rc)) return true;
+                if(m.getTo().isSame(cc)) return true;
             }
         }
         return false;
+    }
+
+    public boolean isChecked(boolean isWhite, Board board) {
+        for (IPiece p : board.getAllColorPieces(isWhite)) {
+            Coordinate cc = board.getPieceCoordiante(p);
+            if(p.canBeChecked() && isChecked(cc, board)) return true;
+        } return false;
     }
 
     public boolean isChecked(boolean isWhite) {
@@ -76,7 +85,7 @@ public class Game {
         if(p == null) return legalMoves;
         for (Move m : p.allMoves(board, c))
         {
-            if(!willBeChecked(p.getIsWhite(), m)) legalMoves.add(m);
+            if(!willBeChecked(p.getIsWhite(), m) && p.getIsWhite() == board.isWhiteTurn()) legalMoves.add(m);
         }
         return legalMoves;
     }
@@ -106,6 +115,11 @@ public class Game {
             if(m.isSame(m2)) return true;
         }
         return false;
+    }
+
+    public void playAI(Move m) {
+        board.movePieceWithoutRestriction(m);
+        board.changeTurn();
     }
 
     public void play(Move m) {

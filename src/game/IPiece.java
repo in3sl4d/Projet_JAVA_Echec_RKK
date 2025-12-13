@@ -2,6 +2,7 @@ package game;
 
 import move.Move;
 import move.coordinate.Coordinate;
+import piece.PieceType;
 
 import java.util.ArrayList;
 
@@ -13,4 +14,7 @@ public interface IPiece {
 
     String toString();
 
+    boolean canBeChecked();
+
+    PieceType getType();
 }

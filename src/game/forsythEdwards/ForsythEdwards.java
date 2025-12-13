@@ -1,20 +1,46 @@
 package game.forsythEdwards;
 
 import game.Board;
+import game.IGameLoader;
 import move.coordinate.Coordinate;
 import game.IPiece;
 import piece.PieceFactory;
+import piece.PieceType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class ForsythEdwards {
+public class ForsythEdwards implements IGameLoader {
 
     private ArrayList<Coordinate> coordonateList;
     private ArrayList<IPiece> pieces;
 
     private boolean isWhiteTurn = true;
+    private HashMap<String, Boolean> canRock;
+
+    private static HashMap<String, PieceType> pieceTypes;
+    private static HashMap<PieceType, String> typePieces;
+
+    static {
+        pieceTypes = new HashMap<>();
+        pieceTypes.put("p", PieceType.PAWN);
+        pieceTypes.put("q", PieceType.QUEEN);
+        pieceTypes.put("n", PieceType.KNIGHT);
+        pieceTypes.put("b", PieceType.BISHOP);
+        pieceTypes.put("r", PieceType.ROOK);
+        pieceTypes.put("k", PieceType.KING);
+
+        typePieces = new HashMap<>();
+        typePieces.put(PieceType.PAWN, "p");
+        typePieces.put(PieceType.QUEEN, "q");
+        typePieces.put(PieceType.KNIGHT, "n");
+        typePieces.put(PieceType.BISHOP, "b");
+        typePieces.put(PieceType.ROOK, "r");
+        typePieces.put(PieceType.KING, "k");
+    }
 
     public ForsythEdwards(String fen) {
+        canRock = new HashMap<>();
 
         coordonateList = new ArrayList<>();
         pieces = new ArrayList<>();
@@ -37,19 +63,26 @@ public class ForsythEdwards {
             }
             boolean isWhite = Character.isUpperCase(c);
             char type = Character.toLowerCase(c);
-            pieces.add(PieceFactory.createPiece(String.valueOf(type), isWhite));
+            pieces.add(PieceFactory.createPiece(pieceTypes.get(String.valueOf(type)), isWhite));
             coordonateList.add(new Coordinate(x, y));
             y++;
 
         }
 
         String[] s = fen.split(" ");
-        if (s[1].equals("b")) isWhiteTurn = false;
+            if (s[1].equals("b")) isWhiteTurn = false;
+        if (s.length >= 3) {
+            canRock.put("K", s[2].contains("K"));
+            canRock.put("Q", s[2].contains("Q"));
+            canRock.put("k", s[2].contains("k"));
+            canRock.put("q", s[2].contains("q"));
+        }
     }
 
     public ArrayList<IPiece> getPieces() { return pieces; }
     public ArrayList<Coordinate> getCoordonateList() { return coordonateList; }
     public boolean isWhiteTurn() { return isWhiteTurn; }
+    public HashMap<String, Boolean> getCanRock() { return canRock; }
 
     public static String boardToFen(Board board) {
         StringBuilder fen = new StringBuilder();
@@ -72,7 +105,8 @@ public class ForsythEdwards {
                         emptyCount = 0;
                     }
                     // On ajoute le caractère de la pièce
-                    fen.append(piece.getIsWhite() ? piece.toString().toUpperCase() : piece.toString());
+                    String letter = typePieces.get(piece.getType());
+                    fen.append(piece.getIsWhite() ? letter.toUpperCase() : letter);
                 }
             }
 

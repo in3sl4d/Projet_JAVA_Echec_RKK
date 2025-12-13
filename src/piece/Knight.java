@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Knight extends Piece {
 
     public Knight(boolean isWhite) {
-        super(isWhite, "n");
+        super(isWhite, PieceType.KNIGHT);
     }
 
 

@@ -10,11 +10,11 @@ import java.util.ArrayList;
 public abstract class Piece implements IPiece {
 
     private boolean isWhite;
-    private String repre;
+    private PieceType type;
 
-    public Piece(boolean isWhite, String repre) {
+    public Piece(boolean isWhite, PieceType type) {
         this.isWhite = isWhite;
-        this.repre = repre;
+        this.type = type;
     }
 
     @Override
@@ -22,9 +22,9 @@ public abstract class Piece implements IPiece {
         return isWhite;
     }
 
-    public String toString()
+    public PieceType getType()
     {
-        return repre;
+        return type;
     }
 
     protected ArrayList<Move> getMovesDirection(int[] xDirection, int[] yDirection, Coordinate coord, Board board) {
@@ -59,5 +59,22 @@ public abstract class Piece implements IPiece {
             }
         }
         return moves;
+    }
+
+    public boolean canBeChecked() {
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        switch (type) {
+            case PAWN: return "p";
+            case ROOK: return "r";
+            case KNIGHT: return "n";
+            case BISHOP: return "b";
+            case QUEEN: return "q";
+            case KING: return "k";
+            default: return "?";
+        }
     }
 }

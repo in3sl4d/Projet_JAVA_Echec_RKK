@@ -1,7 +1,9 @@
 package test;
 
 import game.Board;
+import game.IGameLoader;
 import game.IPiece;
+import game.forsythEdwards.ForsythEdwards;
 import move.coordinate.Coordinate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,9 +14,8 @@ class BoardTest {
 
     @Test
     void testBoardInitializationWithFen() {
-        String fen = "r3k3/8/8/3R4/8/8/8/R3K3 w";
-
-        Board board = new Board(fen);
+        String fen = "r3k3/8/8/3R4/8/8/8/R3K3 w KQkq 0 1";
+        Board board = new Board(new ForsythEdwards(fen));
 
         Coordinate cA1 = new Coordinate("a1");
         IPiece pieceA1 = board.getPieceAt(cA1);

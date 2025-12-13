@@ -6,6 +6,7 @@ import move.coordinate.Coordinate;
 import piece.King;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Board {
 
@@ -13,14 +14,21 @@ public class Board {
     private IPiece[][] board;
     private ArrayList<IPiece> allWhitePieces;
     private ArrayList<IPiece> allBlackPieces;
-    private IPiece whiteKing;
-    private IPiece blackKing;
     private boolean isWhiteTurn = true;
+    private HashMap<String, Boolean> canRock;
 
     public Board() {
         board = new IPiece[BOARD_SIZE][BOARD_SIZE];
         allWhitePieces = new ArrayList<>();
         allBlackPieces = new ArrayList<>();
+    }
+
+    public Board(IGameLoader gameLoader)
+    {
+        this();
+        addPieces(gameLoader.getPieces(), gameLoader.getCoordonateList());
+        isWhiteTurn = gameLoader.isWhiteTurn();
+        canRock = gameLoader.getCanRock();
     }
 
     public Board(String strf) {
@@ -43,10 +51,6 @@ public class Board {
                     if (p.getIsWhite()) allWhitePieces.add(p);
                     else allBlackPieces.add(p);
 
-                    if (p instanceof King) {
-                        if (p.getIsWhite()) this.whiteKing = p;
-                        else this.blackKing = p;
-                    }
                 }
             }
         }
@@ -64,20 +68,8 @@ public class Board {
         }
     }
 
-    private void setWhiteKing(IPiece piece) {
-        whiteKing = piece;
-    }
-
-    private void setBlackKing(IPiece piece) {
-        blackKing = piece;
-    }
-
     private void putPiece(IPiece piece, String coordinate) {
         int[] c = Coordinate.stringToCoordinate(coordinate);
-        if (piece instanceof King) {
-            if (piece.getIsWhite()) setWhiteKing(piece);
-            else setBlackKing(piece);
-        }
         board[c[0]][c[1]] = piece;
         if (piece != null) {
             ArrayList<IPiece> list = piece.getIsWhite() ? allWhitePieces : allBlackPieces;
@@ -109,10 +101,6 @@ public class Board {
         putPiece(null, go.toString());
     }
 
-    public Coordinate getKingCoordinate(boolean isWhite) {
-        IPiece king = isWhite ? whiteKing : blackKing;
-        return getPieceCoordiante(king);
-    }
 
 
     public Coordinate getPieceCoordiante(IPiece piece) {
@@ -150,15 +138,12 @@ public class Board {
         board = new IPiece[BOARD_SIZE][BOARD_SIZE];
         allWhitePieces = new ArrayList<>();
         allBlackPieces = new ArrayList<>();
-        whiteKing = null;
-        blackKing = null;
     }
 
-    public void loadFen(String startFen) {
+    public void loadGame(IGameLoader gameLoader) {
         reset();
-        ForsythEdwards f = new ForsythEdwards(startFen);
-        addPieces(f.getPieces(), f.getCoordonateList());
-        isWhiteTurn = f.isWhiteTurn();
+        addPieces(gameLoader.getPieces(), gameLoader.getCoordonateList());
+        isWhiteTurn = gameLoader.isWhiteTurn();
     }
 
     public ArrayList<IPiece> getAllWhitePieces() { return allWhitePieces; }
@@ -169,6 +154,12 @@ public class Board {
 
     public boolean isWhiteTurn() { return isWhiteTurn; }
 
+    public ArrayList<IPiece> getAllPieces(){
+        ArrayList<IPiece> allPieces = new ArrayList<>();
+        allPieces.addAll(allWhitePieces);
+        allPieces.addAll(allBlackPieces);
+        return allPieces;
+    }
 
 
 }

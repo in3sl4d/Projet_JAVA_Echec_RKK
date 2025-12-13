@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Bishop extends Piece {
 
     public Bishop(boolean isWhite) {
-        super(isWhite, "b");
+        super(isWhite, PieceType.BISHOP);
     }
 
 

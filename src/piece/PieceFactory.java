@@ -4,20 +4,20 @@ import game.IPiece;
 
 public class PieceFactory {
 
-    public static IPiece createPiece(String pieceName, boolean isWhite) {
-        if(pieceName == null || pieceName.isEmpty()) return null;
-        switch (pieceName) {
-            case "k":
+    public static IPiece createPiece(PieceType type, boolean isWhite) {
+        if(type == null) return null;
+        switch (type) {
+            case KING:
                 return new King(isWhite);
-            case "r":
+            case ROOK:
                 return new Rook(isWhite);
-            case "p":
+            case PAWN:
                 return new Pawn(isWhite);
-            case "n":
+            case KNIGHT:
                 return new Knight(isWhite);
-            case "b":
+            case BISHOP:
                 return new Bishop(isWhite);
-            case "q":
+            case QUEEN:
                 return new Queen(isWhite);
             default:
                 return null;

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Queen extends Piece {
 
     public Queen(boolean isWhite) {
-        super(isWhite, "q");
+        super(isWhite, PieceType.QUEEN);
     }
 
 

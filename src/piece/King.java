@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class King extends Piece implements IPiece {
 
     public King(boolean isWhite) {
-        super(isWhite, "k");
+        super(isWhite, PieceType.KING);
     }
 
     @Override
@@ -33,4 +33,8 @@ public class King extends Piece implements IPiece {
         return moves;
     }
 
+    @Override
+    public boolean canBeChecked() {
+        return true;
+    }
 }

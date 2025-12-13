@@ -41,7 +41,6 @@ class ForsythEdwardsTest {
     void testboardToFen()
     {
         Board board = new Board("r5k1/8/8/8/3R4/8/8/K7 w");
-        System.out.println(board);
         Assertions.assertEquals("r5k1/8/8/8/3R4/8/8/K7 w - - 0 1", ForsythEdwards.boardToFen(board));
     }
 
