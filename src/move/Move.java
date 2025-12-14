@@ -27,6 +27,7 @@ public class Move{
         this.to = new Coordinate(xTo, yTo);
     }
 
+    // separe un deplacement en String en 2 coordonnees(depart/arrive)
     public Move(String moveString){
         Coordinate[] c;
         try
@@ -39,6 +40,7 @@ public class Move{
         this.to = c[1];
     }
 
+    // renvoie un deplacement sous forme de tableau
     public static Coordinate[] StringToCoordinate(String str) {
         if(str.length() != 7) throw new stringMoveNotValidExecption("Move need to make 7 of lenght");
         Coordinate go = null, to = null;
@@ -57,6 +59,8 @@ public class Move{
         return new Coordinate[]{go, to};
     }
 
+
+    // renvoie un deplacement sous forme de String
     public static String coordinateToString(int xd, int yd, int xa, int ya) {
         String d = "", a = "";
         try
@@ -76,6 +80,7 @@ public class Move{
         return d + " - " + a;
     }
 
+    // Convertis le deplacement en String
     public static String coordinateToString(Coordinate go, Coordinate to) {
         return coordinateToString(go.getX(), go.getY(), to.getX(), to.getY());
     }

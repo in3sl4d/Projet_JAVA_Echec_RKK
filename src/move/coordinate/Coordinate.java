@@ -16,10 +16,12 @@ public class Coordinate {
         this.y = s[1];
     }
 
+    // verifie que c'est bien une coordonnee du board (Il faudra definir des constante pour supprimer les nombres magiques)
     public static boolean coordonateIsLegit(int x, int y) {
         return x >= 0 && x < 8 && y >= 0 && y < 8;
     }
 
+    // Conversion coordonnee vers string
     public static String coordinatetoString(int x, int y) {
         if(x > 7 || x < 0 || y > 7 || y < 0) throw new CoordinateNotValidExecption("Coordinates must be between 0 and 7");
         char h = ((char) ('a' + y));
@@ -27,6 +29,8 @@ public class Coordinate {
         return h + c;
     }
 
+
+    // Conversion string vers coordonnee
     public static int[] stringToCoordinate(String coord) {
         int[] r = new int[2];
         if (coord.length() != 2) throw new CoordinateNotValidExecption("Coordinates must be 2 leghts (exemple 'A1')");
@@ -43,6 +47,8 @@ public class Coordinate {
         return r;
     }
 
+
+    // Verifie egalite entre coordonees
     public boolean isSame(Coordinate c) {
         if(c == null) return false;
         return this.x == c.x && this.y == c.y;
