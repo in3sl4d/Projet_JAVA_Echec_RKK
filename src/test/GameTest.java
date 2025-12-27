@@ -1,9 +1,8 @@
 package test;
 
-import static org.junit.jupiter.api.Assertions.*;
-import game.Game;
-import game.forsythEdwards.ForsythEdwards;
-import move.Move;
+import app.Game;
+import infrastructure.ia.forsythEdwards.ForsythEdwards;
+import domain.move.Move;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

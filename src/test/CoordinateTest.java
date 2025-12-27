@@ -1,6 +1,6 @@
 package test;
 
-import move.coordinate.Coordinate;
+import domain.move.coordinate.Coordinate;
 import org.junit.jupiter.api.Assertions;
 
 class CoordinateTest {

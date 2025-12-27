@@ -1,11 +1,7 @@
-import game.Game;
-import game.Ibot;
-import game.forsythEdwards.ForsythEdwards;
-import ia.Bot;
-import ia.Evaluate;
-import ia.MoveSearch;
-import move.Move;
-import move.coordinate.Coordinate;
+import app.Game;
+import app.Ibot;
+import infrastructure.ia.forsythEdwards.ForsythEdwards;
+import infrastructure.ia.Bot;
 
 public class Test {
 

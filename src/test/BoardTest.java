@@ -1,14 +1,12 @@
 package test;
 
-import game.Board;
-import game.IGameLoader;
-import game.IPiece;
-import game.forsythEdwards.ForsythEdwards;
-import move.coordinate.Coordinate;
+import domain.Board;
+import domain.IPiece;
+import infrastructure.ia.forsythEdwards.ForsythEdwards;
+import domain.move.coordinate.Coordinate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import piece.King;
-import piece.Rook;
+import domain.piece.Rook;
 
 class BoardTest {
 

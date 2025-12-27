@@ -1,0 +1,171 @@
+package app;
+
+import domain.Board;
+import domain.IPiece;
+import domain.IllegalMoveExecption;
+import domain.move.Move;
+import domain.move.coordinate.Coordinate;
+import domain.piece.PieceType;
+
+import java.util.ArrayList;
+
+public class Game {
+
+    private final Board board;
+
+    public Game() {
+        board = new Board();
+    }
+
+    public Game(Board board) {
+        this.board = new Board(board);
+    }
+
+    public Game(IGameLoader loader) { board = new Board(loader); }
+
+    public String toString()
+    {
+        return board.toString();
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public boolean isChecked(Coordinate cc, Board board) {
+        IPiece pp = board.getPieceAt(cc);
+        if(pp == null) return false;
+        if(!pp.canBeChecked()) return false;
+        ArrayList<IPiece> allP = board.getAllColorPieces(!pp.getIsWhite());
+        for (IPiece p : allP) {
+            Coordinate c = board.getPieceCoordiante(p);
+            if(c == null) continue;
+            for (Move m : p.allMoves(board, c))
+            {
+                if(m.getTo().isSame(cc)) return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isChecked(boolean isWhite, Board board) {
+        for (IPiece p : board.getAllColorPieces(isWhite)) {
+            Coordinate cc = board.getPieceCoordiante(p);
+            if(p.canBeChecked() && isChecked(cc, board)) return true;
+        } return false;
+    }
+
+    public boolean isChecked(boolean isWhite) {
+        return isChecked(isWhite, this.board);
+    }
+
+    public boolean willBeChecked(boolean isWhite, Move m) {
+        Board boardCopy = new Board(board);
+        boardCopy.movePieceWithoutRestriction(m);
+        return isChecked(isWhite, boardCopy);
+    }
+
+    public boolean willBeCheckedMate(boolean isWhite, Move m) {
+        Board boardCopy = new Board(board);
+        boardCopy.movePieceWithoutRestriction(m);
+
+        for (IPiece p : boardCopy.getAllColorPieces(isWhite)) {
+            Coordinate c = boardCopy.getPieceCoordiante(p);
+            if(c == null) continue;
+            for(Move m2 : p.allMoves(boardCopy, c))
+            {
+                Board next = new Board(boardCopy);
+                next.movePieceWithoutRestriction(m2);
+                if(!isChecked(isWhite, next)) return false;
+            }
+        }
+
+        return true;
+    }
+
+    public ArrayList<Move> allLegalMoves(Coordinate c) {
+        IPiece p = board.getPieceAt(c);
+        ArrayList<Move> legalMoves = new ArrayList<>();
+        if(p == null) return legalMoves;
+        for (Move m : p.allMoves(board, c))
+        {
+            if(!willBeChecked(p.getIsWhite(), m) && p.getIsWhite() == board.isWhiteTurn()) legalMoves.add(m);
+        }
+        return legalMoves;
+    }
+
+    public ArrayList<Move> allLegalMoves(boolean isWhite) {
+        ArrayList<Move> legalMoves = new ArrayList<>();
+        ArrayList<IPiece> pieces = board.getAllColorPieces(isWhite);
+        for (IPiece p : pieces) {
+            legalMoves.addAll(allLegalMoves(board.getPieceCoordiante(p)));
+        }
+        return legalMoves;
+    }
+
+    public ArrayList<Move> allLegalMoves() {
+        ArrayList<Move> legalMoves = new ArrayList<>();
+        legalMoves.addAll(allLegalMoves(false));
+        legalMoves.addAll(allLegalMoves(true));
+        return legalMoves;
+    }
+
+    public boolean canMovePiece(Move m) {
+        IPiece piece = board.getPieceAt(m.getGo());
+        if(piece == null) return false;
+        ArrayList<Move> allLegalMove = allLegalMoves(m.getGo());
+        if(allLegalMove == null) return false;
+        for (Move m2 : allLegalMove) {
+            if(m.isSame(m2)) return true;
+        }
+        return false;
+    }
+
+    public void playAI(Move m) {
+        board.movePieceWithoutRestriction(m);
+        board.changeTurn();
+    }
+
+    public void play(Move m) {
+        if(!canMovePiece(m)) throw new IllegalMoveExecption("can't domain.move domain.piece");
+
+        IPiece pieceMoved = board.getPieceAt(m.getGo());
+        updateCastlingRights(pieceMoved, m.getGo());
+
+        IPiece pieceCaptured = board.getPieceAt(m.getTo());
+        if (pieceCaptured != null) {
+            // On passe la pièce capturée et SA position (m.getTo())
+            updateCastlingRights(pieceCaptured, m.getTo());
+        }
+        board.movePieceWithoutRestriction(m);
+        board.changeTurn();
+    }
+
+    private void updateCastlingRights(IPiece p, Coordinate c) {
+        if (p.getType() == PieceType.KING) {
+            if (p.getIsWhite()) {
+                board.setCastlingRight("K", false);
+                board.setCastlingRight("Q", false);
+            } else {
+                board.setCastlingRight("k", false);
+                board.setCastlingRight("q", false);
+            }
+        } else if (p.getType() == PieceType.ROOK) {
+            int x = c.getX();
+            int y = c.getY();
+
+            if (p.getIsWhite()) {
+                if (x == 0) {
+                    if (y == 0) board.setCastlingRight("Q", false); // Tour A1
+                    else if (y == 7) board.setCastlingRight("K", false); // Tour H1
+                }
+            } else {
+                // Tour Noire (Doit être sur la ligne 7)
+                if (x == 7) {
+                    if (y == 0) board.setCastlingRight("q", false); // Tour A8
+                    else if (y == 7) board.setCastlingRight("k", false); // Tour H8
+                }
+            }
+        }
+    }
+}

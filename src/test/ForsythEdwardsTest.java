@@ -1,12 +1,12 @@
 package test;
 
-import game.Board;
-import game.forsythEdwards.ForsythEdwards;
-import game.IPiece;
-import move.coordinate.Coordinate;
+import domain.Board;
+import infrastructure.ia.forsythEdwards.ForsythEdwards;
+import domain.IPiece;
+import domain.move.coordinate.Coordinate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import piece.Rook;
+import domain.piece.Rook;
 
 import java.util.ArrayList;
 
