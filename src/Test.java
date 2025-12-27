@@ -1,7 +1,7 @@
-import app.Game;
-import app.Ibot;
-import infrastructure.ia.forsythEdwards.ForsythEdwards;
-import infrastructure.ia.Bot;
+import usercase.Game;
+import usercase.Ibot;
+import interfaceAdapters.forsythEdwards.ForsythEdwards;
+import interfaceAdapters.Bot;
 
 public class Test {
 

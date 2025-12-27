@@ -1,0 +1,24 @@
+package entities.piece;
+
+import entities.Board;
+import entities.move.Move;
+import entities.move.coordinate.Coordinate;
+
+import java.util.ArrayList;
+
+public class Queen extends Piece {
+
+    public Queen(boolean isWhite) {
+        super(isWhite, PieceType.QUEEN);
+    }
+
+
+    @Override
+    public ArrayList<Move> allMoves(Board board, Coordinate coord) {
+        ArrayList<Move> moves = new ArrayList<>();
+        int[] m = {1, 1, -1, -1, 1, -1, 0, 0};
+        int[] mi = {1, -1, 1, -1, 0, 0, 1, -1};
+        moves.addAll(super.getMovesDirection(m, mi, coord, board));
+        return moves;
+    }
+}

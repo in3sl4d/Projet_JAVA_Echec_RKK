@@ -2,7 +2,7 @@ package test;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import domain.move.Move;
+import entities.move.Move;
 
 class MoveTest {
 

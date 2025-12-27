@@ -1,8 +1,8 @@
 package test;
 
-import app.Game;
-import infrastructure.ia.forsythEdwards.ForsythEdwards;
-import domain.move.Move;
+import usercase.Game;
+import interfaceAdapters.forsythEdwards.ForsythEdwards;
+import entities.move.Move;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
