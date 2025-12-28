@@ -11,9 +11,11 @@ Comme couche de la clean architecture nous avons :
 Tous les tests passent (30/30)
 
 
-comment connecte le moteur a cuteChess
-  dans un premier temps il faut generer le jar du projet, avec intelijie cela n'est pas complique dans projet structure, Artifacts ajouter un jar puis build project
-  dans un deuxieme temps il faut mettre le jar dans un dossier et ecrire un .bat avec sa cette ligne
+Comment connecter le moteur de jeu à cuteChess ?
+  Dans un premier temps il faut generer le jar du projet, avec intelliJ. Pour cela, il faut aller dans File puis dans projet structure, Artifacts, ajouter un jar puis build project
+  Ensuite il faut mettre le jar dans un dossier et ecrire dans un fichier .bat les lignes suivantes:
+  
   @echo off
   java -jar Projet_JAVA_Echec_RKK.jar
-  puis dans cuteChess il faut enregistre un nouveau moteur en lui donnant le .bat puis on peut l'utiliser
+  
+  Enfin, dans cuteChess il faut enregistree un nouveau moteur en lui donnant le .bat afin de pouvoir l'utiliser.
