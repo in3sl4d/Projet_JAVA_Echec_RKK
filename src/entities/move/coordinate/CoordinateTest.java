@@ -1,6 +1,5 @@
-package test;
+package entities.move.coordinate;
 
-import entities.move.coordinate.Coordinate;
 import org.junit.jupiter.api.Assertions;
 
 class CoordinateTest {

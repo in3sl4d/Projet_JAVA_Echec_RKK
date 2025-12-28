@@ -1,4 +1,4 @@
-package test;
+package entities.piece;
 
 import entities.Board;
 import entities.IPiece;

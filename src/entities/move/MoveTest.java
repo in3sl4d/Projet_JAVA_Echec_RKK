@@ -1,8 +1,7 @@
-package test;
+package entities.move;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import entities.move.Move;
 
 class MoveTest {
 

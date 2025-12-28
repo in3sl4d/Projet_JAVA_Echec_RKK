@@ -1,12 +1,10 @@
-package test;
+package entities;
 
-import entities.Board;
-import entities.IPiece;
+import entities.piece.Rook;
 import interfaceAdapters.forsythEdwards.ForsythEdwards;
 import entities.move.coordinate.Coordinate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import entities.piece.Rook;
 
 class BoardTest {
 

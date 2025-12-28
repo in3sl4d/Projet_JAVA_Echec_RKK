@@ -1,7 +1,6 @@
-package test;
+package interfaceAdapters.forsythEdwards;
 
 import entities.Board;
-import interfaceAdapters.forsythEdwards.ForsythEdwards;
 import entities.IPiece;
 import entities.move.coordinate.Coordinate;
 import org.junit.jupiter.api.Assertions;

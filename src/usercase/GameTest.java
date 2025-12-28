@@ -1,6 +1,5 @@
-package test;
+package usercase;
 
-import usercase.Game;
 import interfaceAdapters.forsythEdwards.ForsythEdwards;
 import entities.move.Move;
 import org.junit.jupiter.api.Assertions;
